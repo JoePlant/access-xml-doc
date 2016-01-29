@@ -96,15 +96,21 @@ End Sub
 Private Function ChildControls(ByRef c As Object) As Object
     On Error Resume Next
     Set ChildControls = Nothing
-    Set ChildControls = c.Controls
+    
+    If (c.ControlType = acTabCtl) Then
+        Set ChildControls = c.Pages
+    Else
+        Set ChildControls = c.Controls
+    End If
+    
     If Err.Number = 438 Then
         Err.Clear
     End If
+    
 End Function
 
 Public Function ControlType() As String
     Dim ct As String
-    
     
     Select Case ctrl.ControlType
         Case acLabel:
@@ -145,6 +151,8 @@ Public Function ControlType() As String
             ct = "Toggle Button"
         Case acTabCtl
             ct = "Tab Control"
+        Case acAttachment
+            ct = "Attachment"
         Case Else
             ct = ctrl.ControlType
     End Select

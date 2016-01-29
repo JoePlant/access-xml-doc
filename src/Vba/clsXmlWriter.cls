@@ -152,9 +152,9 @@ Dim pt As String
 
     v = prop.Value
 
-    If (v = "") Then
+'    If (v = "") Then
     
-    Else
+'    Else
     
         n = prop.Name
         t = prop.Type
@@ -168,7 +168,7 @@ Dim pt As String
             Call WriteText(Value:=v, bCrLf:=False)
             Call WriteEndElement(Name:="Property", bPad:=False)
         End If
-    End If
+'    End If
 End Sub
 
 Private Function LookupPropertyType(iType As Integer) As String

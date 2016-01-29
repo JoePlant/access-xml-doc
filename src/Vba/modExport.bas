@@ -85,6 +85,45 @@ Sub ExportFormsAsXml()
     
 End Sub
 
+Sub ExportMacrosAsXml()
+    Dim accObj As AccessObject
+    Dim bWasOpen As Boolean
+    Dim strDoc As String
+    Dim f As Form
+    
+    For Each accObj In CurrentProject.AllMacros
+        strDoc = accObj.Name
+        bWasOpen = accObj.IsLoaded
+        If Not bWasOpen Then
+            ''DoCmd.OP strDoc, View:=acDesign, WindowMode:=acWindowNormal
+        End If
+        
+        DoEvents
+        
+        Debug.Print "Opening " & strDoc
+        
+        
+        'Set f = Forms(strDoc)
+        
+        'Dim fx As clsFormExport
+        'Set fx = New clsFormExport
+        'Set fx.Form = f
+        'fx.Directory = "d:\xml"
+        
+        'Dim fxml As String
+        'fxml = fx.ExportAsXml
+        
+        'If Not bWasOpen Then
+        '    DoCmd.Close acForm, strDoc, acSaveNo
+        'End If
+        
+        DoEvents
+        
+    Next
+    
+End Sub
+
+
 Sub ExportReportsAsXml()
     Dim accObj As AccessObject
     Dim bWasOpen As Boolean
@@ -141,5 +180,67 @@ Sub ExportDatabaseAsXml()
     
     DoEvents
     
+End Sub
+
+
+Public Sub DocDatabase()
+ '====================================================================
+ ' Name:    DocDatabase
+ ' Purpose: Documents the database to a series of text files
+ '
+ ' Author:  Arvin Meyer
+ ' Date:    June 02, 1999
+ ' Comment: Uses the undocumented [Application.SaveAsText] syntax
+ '          To reload use the syntax [Application.LoadFromText]
+ '      Modified to set a reference to DAO 8/22/2005
+ '====================================================================
+On Error GoTo Err_DocDatabase
+Dim dbs As DAO.Database
+Dim cnt As DAO.Container
+Dim doc As DAO.Document
+Dim i As Integer
+
+Set dbs = CurrentDb() ' use CurrentDb() to refresh Collections
+
+Set cnt = dbs.Containers("Forms")
+For Each doc In cnt.Documents
+    Application.SaveAsText acForm, doc.Name, "D:\xml\Form_" & doc.Name & ".txt"
+Next doc
+
+Set cnt = dbs.Containers("Reports")
+For Each doc In cnt.Documents
+    Application.SaveAsText acReport, doc.Name, "D:\xml\Report_" & doc.Name & ".txt"
+Next doc
+
+Set cnt = dbs.Containers("Scripts")
+For Each doc In cnt.Documents
+    Application.SaveAsText acMacro, doc.Name, "D:\xml\Scripts_" & doc.Name & ".txt"
+Next doc
+
+Set cnt = dbs.Containers("Modules")
+For Each doc In cnt.Documents
+    Application.SaveAsText acModule, doc.Name, "D:\xml\Module_" & doc.Name & ".txt"
+Next doc
+
+For i = 0 To dbs.QueryDefs.Count - 1
+    Application.SaveAsText acQuery, dbs.QueryDefs(i).Name, "D:\xml\Query_" & dbs.QueryDefs(i).Name & ".txt"
+Next i
+
+Set doc = Nothing
+Set cnt = Nothing
+Set dbs = Nothing
+
+Exit_DocDatabase:
+    Exit Sub
+
+
+Err_DocDatabase:
+    Select Case Err
+
+    Case Else
+        MsgBox Err.Description
+        Resume Exit_DocDatabase
+    End Select
+
 End Sub
 
