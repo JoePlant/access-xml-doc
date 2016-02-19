@@ -153,7 +153,9 @@ Public Function ControlType() As String
             ct = "Tab Control"
         Case acAttachment
             ct = "Attachment"
-        Case Else
+		Case acEmptyCell
+			ct = "Empty Cell"
+		Case Else
             ct = ctrl.ControlType
     End Select
     ControlType = ct
