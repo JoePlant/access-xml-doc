@@ -61,10 +61,23 @@ Function ExportAsXml() As String
     
         Call xml.WritePropertiesAsXml(pReport.Properties)
         
-        Call WriteSection(acDetail)
-        Call WriteSection(acHeader)
-        Call WriteSection(acFooter)
+        Call WriteGroup(0)
+        Call WriteGroup(1)
+        Call WriteGroup(2)
+        Call WriteGroup(3)
+        Call WriteGroup(4)
+        Call WriteGroup(5)
+        Call WriteGroup(6)
+        Call WriteGroup(7)
+        
         Call WriteSection(acPageHeader)
+        Call WriteSection(acHeader)
+        Call WriteSection(acGroupLevel1Header)
+        Call WriteSection(acGroupLevel2Header)
+        Call WriteSection(acDetail)
+        Call WriteSection(acGroupLevel2Footer)
+        Call WriteSection(acGroupLevel1Footer)
+        Call WriteSection(acFooter)
         Call WriteSection(acPageFooter)
         
         Call WriteModule
@@ -97,6 +110,23 @@ On Error Resume Next
         Call WriteControls(sect.Controls)
 
         Call xml.WriteEndElement("Section")
+    End If
+    
+End Sub
+
+Private Sub WriteGroup(level As Integer)
+On Error Resume Next
+
+    Dim grp As groupLevel
+    Set grp = pReport.groupLevel(level)
+    
+    If Not (grp Is Nothing) Then
+        Call xml.WriteElementStart("GroupLevel")
+        Call xml.WriteAttribute("level", "" & level & "")
+        Call xml.WriteElementEnd("GroupLevel")
+        Call xml.WritePropertiesAsXml(grp.Properties)
+
+        Call xml.WriteEndElement("GroupLevel")
     End If
     
 End Sub
