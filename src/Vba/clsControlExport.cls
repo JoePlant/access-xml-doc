@@ -153,9 +153,9 @@ Public Function ControlType() As String
             ct = "Tab Control"
         Case acAttachment
             ct = "Attachment"
-		Case acEmptyCell
+        Case acEmptyCell
 			ct = "Empty Cell"
-		Case 113:           ' No enum for chart
+        Case 113:             ' Special case for charts as not part of AcControlType
 			ct = "Chart"  
 		Case Else
             ct = ctrl.ControlType
