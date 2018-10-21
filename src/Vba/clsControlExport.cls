@@ -155,6 +155,8 @@ Public Function ControlType() As String
             ct = "Attachment"
 		Case acEmptyCell
 			ct = "Empty Cell"
+		Case 113:           ' No enum for chart
+			ct = "Chart"  
 		Case Else
             ct = ctrl.ControlType
     End Select
