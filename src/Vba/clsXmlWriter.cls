@@ -112,6 +112,13 @@ Private Function Escape(Value As String) As String
     escaped = Replace(escaped, ">", "&gt;")
     escaped = Replace(escaped, "'", "&apos;")
     escaped = Replace(escaped, """", "&quot;")
+	
+	' Values are sometimes null terminated 
+	If (Len(escaped) > 0) Then
+		If Mid$(escaped, Len(escaped), 1) = Chr$(0) Then 
+			escaped = Left$(escaped, Len(escaped) - 1)
+		End If
+	End If
     
     Escape = escaped
 End Function
