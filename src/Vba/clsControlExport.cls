@@ -157,6 +157,7 @@ Public Function ControlType() As String
 			ct = "Empty Cell"
         Case 113:             ' Special case for charts as not part of AcControlType
 			ct = "Chart"  
+			
 		Case Else
             ct = ctrl.ControlType
     End Select
